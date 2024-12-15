@@ -1,5 +1,5 @@
 import React from 'react';
-import { Leaf, DollarSign, Clock, Zap, ArrowRight,StoreIcon,Sun,Bike,Earth,FileClock,BadgeIndianRupee } from 'lucide-react';
+import { Leaf, DollarSign, Clock, Zap, ArrowRight,StoreIcon,Sun,Bike,Earth,FileClock,BadgeIndianRupee,IndianRupeeIcon } from 'lucide-react';
 import { Link,useNavigate } from 'react-router-dom';
 import Navbar from './NavBar';
 import ChatBot from './Chatbot';
@@ -40,7 +40,7 @@ function App() {
         </h2>
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           <StatCard
-            icon={DollarSign}
+            icon={IndianRupeeIcon}
             title="Annual Savings"
             value="₹2,400"
             description="Average yearly savings for our users through eco-friendly choices"
