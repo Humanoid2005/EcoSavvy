@@ -155,7 +155,7 @@ return(
                       value={input}
                       onChange={(e) => setInput(e.target.value)}
                       className="flex-1 px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#0D9488] focus:border-transparent"
-                      placeholder="Ask about export requirements..."
+                      placeholder="Ask suggestions to become eco-friendly..."
                       disabled={isLoading}
                     />
                     <button
