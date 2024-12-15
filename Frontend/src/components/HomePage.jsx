@@ -42,7 +42,7 @@ function App() {
           <StatCard
             icon={DollarSign}
             title="Annual Savings"
-            value="$2,400"
+            value="₹2,400"
             description="Average yearly savings for our users through eco-friendly choices"
           />
           <StatCard

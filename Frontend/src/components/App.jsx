@@ -7,6 +7,7 @@ import RoofTopEstimation from "./SolarAnalysis";
 import DailyActivityLoggin from "./DailyActivity";
 import Leaderboard from "./Leaderboard";
 import TransportGuide from "./TransportGuide";
+import ProductDetail from "./ProductDetail";
 
 function App() {
     return (
@@ -19,6 +20,7 @@ function App() {
             <Route path="/daily-activities" element={<DailyActivityLoggin/>}></Route>
             <Route path="/leaderboard" element={<Leaderboard/>}></Route>
             <Route path="/transport-guide" element={<TransportGuide/>}></Route>
+            <Route path="/product/:id" element={<ProductDetail/>}></Route>
           </Routes>
         </BrowserRouter>
     )
