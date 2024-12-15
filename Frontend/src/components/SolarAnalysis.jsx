@@ -198,7 +198,7 @@ function SolarAnalysis() {
               <ul className="space-y-2 text-gray-700">
                 <li>• Consider installing {analysisResult.panelCount} solar panels for optimal coverage</li>
                 <li>• Expected daily power generation: {(analysisResult.powerGeneration / 365).toFixed(1)} kWh</li>
-                <li>• Estimated monthly savings: ${(analysisResult.costSavings / 12).toFixed(2)}</li>
+                <li>• Estimated monthly savings: ₹{(analysisResult.costSavings / 12).toFixed(2)}</li>
                 <li>• Your system will pay for itself in {Math.round(analysisResult.paybackPeriod * 10) / 10} years</li>
               </ul>
             </div>
