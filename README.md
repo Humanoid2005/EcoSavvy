@@ -63,4 +63,17 @@ Start the backend server
 ```bash
   uvicorn main:app reload
 ```
+## Team Members
+- Aaryan Antala Aaryan.Antala@iiitb.ac.in
+- Prakrititz Borah Prakrititz.Borah@iiitb.ac.in
+- Ramya Parsania ParsaniaRamya.Parulbhai@iiitb.ac.in
+- Sriram Srikanth Sriram.Srikanth@iiitb.ac.in
+- Unnath Chittimalla Unnath.Chittimalla@iiitb.ac.in
+
+
+## Contributions
+I welcome contributions! Feel free to fork the project and open a pull request for any improvements, bug fixes, or new features.
+
+## License
+This project is licensed under the MIT License. See the LICENSE file for more details.
 
