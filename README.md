@@ -61,6 +61,6 @@ Install dependencies
 Start the backend server
 
 ```bash
-  uvicorn main:app --reload
+  uvicorn main:app reload
 ```
 
