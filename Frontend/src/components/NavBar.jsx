@@ -2,14 +2,15 @@ import React from "react";
 import { Link,useNavigate,useSearchParams} from "react-router-dom";
 import UserMenu from "./UserMenu";
 
-const Navbar = () => {
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
+const Navbar = () => {
   const [user, setUser] = React.useState(null);
   const [loading, setLoading] = React.useState(true);
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
 
-  /*React.useEffect(() => {
+  React.useEffect(() => {
     
     const authStatus = searchParams.get('auth');
     const userData = searchParams.get('user');
@@ -25,7 +26,7 @@ const Navbar = () => {
     }
 
     checkAuthStatus();
-  }, [searchParams, navigate]);*/
+  }, [searchParams, navigate]);
 
 
   React.useEffect(() => {
@@ -36,10 +37,11 @@ const Navbar = () => {
 
   const checkAuthStatus = async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/auth/check', {
+      const response = await fetch(BACKEND_URL+'/api/auth/check', {
         credentials: 'include'
       });
       const data = await response.json();
+      console.log(data);
       if (data.authenticated) {
         setUser(data.user);
         return data.authenticated;
@@ -54,12 +56,12 @@ const Navbar = () => {
   };
 
   const login = () => {
-    window.location.href = 'http://localhost:8000/api/auth/google';
+    window.location.href = BACKEND_URL+'/api/auth/google';
   };
 
   const logout = async () => {
     try {
-      await fetch('http://localhost:8000/api/auth/logout', {
+      await fetch(BACKEND_URL+'/api/auth/logout', {
         method: 'POST',
         credentials: 'include'
       });
@@ -76,7 +78,7 @@ const Navbar = () => {
       <div className="container mx-auto flex justify-between items-center">
         <Link to="/"><h1 className="text-xl font-bold text-[#16A34A]"><span className="text-white">Eco</span><span className="text-[#16A34A]">Saavy</span></h1></Link>
         <div className="space-x-6 flex align-middle">
-          <Link to="/incentives" className="hover:text-[#16A34A] transition-colors">Incentives</Link>
+          <Link to="/testimony" className="hover:text-[#16A34A] transition-colors">Testimony</Link>
           <Link to="/daily-activities" className="hover:text-[#16A34A] transition-colors">Daily Log</Link>
          {/* <Link to="/ai-companion" className="hover:text-[#16A34A] transition-colors">AI Companion</Link>*/}
           <Link to="/leaderboard" className="hover:text-[#16A34A] transition-colors">Leaderboard</Link>

@@ -111,8 +111,28 @@ export default function IncentiveFinder() {
     e.preventDefault();
     setLoading(true);
 
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/govt-schemes`, {
+        method: "GET",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: "include"
+      });
+
+      if (!response.ok) {
+        throw new Error("Unable to fetch data");
+      }
+
+      const result1 = await response.json();
+      setResult(result1);
+    } catch (err) {
+      console.log(err);
+    }
+
+
     // Simulate API call with example response
-    setTimeout(() => {
+    /*setTimeout(() => {
       setResult(
         "Solar Panel Installation Incentives:\n" +
         "- Federal Tax Credit: 30% of total system cost\n" +
@@ -124,7 +144,7 @@ export default function IncentiveFinder() {
         "- LED Lighting: Up to $150 in rebates"
       );
       setLoading(false);
-    }, 1500);
+    }, 1500);*/
   };
 
   return (

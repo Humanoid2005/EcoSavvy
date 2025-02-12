@@ -8,6 +8,7 @@ import DailyActivityLoggin from "./DailyActivity";
 import Leaderboard from "./Leaderboard";
 import TransportGuide from "./TransportGuide";
 import ProductDetail from "./ProductDetail";
+import Testimony from "./Testimony";
 
 function App() {
     return (
@@ -21,6 +22,7 @@ function App() {
             <Route path="/leaderboard" element={<Leaderboard/>}></Route>
             <Route path="/transport-guide" element={<TransportGuide/>}></Route>
             <Route path="/product/:id" element={<ProductDetail/>}></Route>
+            <Route path="/testimony" element={<Testimony/>}></Route>
           </Routes>
         </BrowserRouter>
     )

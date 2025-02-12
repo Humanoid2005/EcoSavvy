@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState ,useEffect} from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { 
   Store, 
@@ -57,7 +57,7 @@ const mockProducts = [
 
 // Product Card Component
 function ProductCard({ product, isSeller = false }) {
-  const { id, name, price, image, rating, description, ecoScore } = product;
+  const { id, name, price, image, rating, description,category } = product;
 
   return (
     <div className="bg-white rounded-xl shadow-md hover:shadow-xl transition-shadow overflow-hidden">
@@ -68,12 +68,13 @@ function ProductCard({ product, isSeller = false }) {
           className="w-full h-48 object-cover"
         />
         <div className="absolute top-2 right-2 bg-green-500 text-white px-2 py-1 rounded-full text-sm">
-          Eco Score: {ecoScore}/10
+          Eco Score: {description.eco_score}/10
         </div>
       </div>
       
       <div className="p-4">
         <h3 className="text-lg font-semibold text-gray-800 mb-2">{name}</h3>
+        <p className="text-gray-600 text-sm mb-3 line-clamp-2">Category: {category}</p>
         <p className="text-gray-600 text-sm mb-3 line-clamp-2">{description}</p>
         
         <div className="flex items-center justify-between mb-4">
@@ -104,7 +105,7 @@ function ProductCard({ product, isSeller = false }) {
 }
 
 // Search Bar Component
-function SearchBar({ onSearch }) {
+function SearchBar(props) {
   return (
     <div className="flex gap-4 mb-8">
       <div className="flex-1 relative">
@@ -112,12 +113,12 @@ function SearchBar({ onSearch }) {
           type="text"
           placeholder="Search eco-friendly products..."
           className="w-full px-6 py-4 rounded-xl bg-white shadow-md pl-12 focus:ring-2 focus:ring-green-500 focus:outline-none"
-          onChange={(e) => onSearch(e.target.value)}
+          onChange={(e) => props.onSearch(e.target.value)}
         />
         <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
       </div>
-      <button className="px-6 py-4 bg-white shadow-md rounded-xl hover:bg-gray-50 transition-colors">
-        <Filter className="w-5 h-5 text-gray-600" />
+      <button className="px-6 py-4 bg-green-300 shadow-md rounded-xl hover:bg-green-500 transition-colors" onClick={(e)=>{props.handleEcoProductQuery(e)}}>
+        <Search className="w-6 h-6 text-gray-600" />
       </button>
     </div>
   );
@@ -235,13 +236,13 @@ function ProductForm({ onSubmit }) {
 }
 
 // Buyer Dashboard Component
-function BuyerDashboard() {
+function BuyerDashboard(props) {
   const [searchQuery, setSearchQuery] = useState('');
-  const [products, setProducts] = useState(mockProducts);
+  const [products, setProducts] = useState(props.Products);
 
   const handleSearch = (query) => {
     setSearchQuery(query);
-    const filtered = mockProducts.filter(product =>
+    const filtered = props.Products.filter(product =>
       product.name.toLowerCase().includes(query.toLowerCase())
     );
     setProducts(filtered);
@@ -251,7 +252,7 @@ function BuyerDashboard() {
     <div className="p-8">
       <div className="max-w-7xl mx-auto">
         <h1 className="text-3xl font-bold text-gray-900 mb-8">Eco-Friendly Products</h1>
-        <SearchBar onSearch={handleSearch} />
+        <SearchBar onSearch={handleSearch} handleEcoProductQuery={props.handleEcoProductQuery} />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {products.map(product => (
             <ProductCard key={product.id} product={product} />
@@ -263,9 +264,9 @@ function BuyerDashboard() {
 }
 
 // Seller Dashboard Component
-function SellerDashboard() {
+function SellerDashboard(props) {
   const [showForm, setShowForm] = useState(false);
-  const [listings, setListings] = useState([mockProducts[0]]);
+  const [listings, setListings] = useState(props.Products);
 
   const handleSubmit = (formData) => {
     const newListing = {
@@ -314,6 +315,60 @@ function SellerDashboard() {
 // Main Marketplace Component
 export default function Marketplace() {
   const [activeTab, setActiveTab] = useState('buyer');
+  const [data, setData] = useState(null);
+  const [pending, setPending] = useState(true);
+  const [error, setError] = useState(null);
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`${BACKEND_URL}/api/all-products`, {
+          method: "GET",
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: "include"
+        });
+
+        if (!response.ok) {
+          throw new Error("Unable to fetch data");
+        }
+
+        const result = await response.json();
+        setData(result);
+        setPending(false);
+      } catch (err) {
+        setError(err.message);
+        setPending(false);
+      }
+    };
+
+    fetchData();
+  }, [BACKEND_URL]);
+
+  const handleEcoProductQuery = async (e)=>{
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/eco-products`, {
+        method: "GET",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: "include"
+      });
+
+      if (!response.ok) {
+        throw new Error("Unable to fetch data");
+      }
+
+      const result = await response.json();
+      setData(result);
+      setPending(false);
+    } catch (err) {
+      setError(err.message);
+      setPending(false);
+    }
+  }
 
   return (
     <>
@@ -350,7 +405,7 @@ export default function Marketplace() {
       </div>
 
       {/* Dashboard Content */}
-      {activeTab === 'buyer' ? <BuyerDashboard /> : <SellerDashboard />}
+      {activeTab === 'buyer' ? <BuyerDashboard Products={data.products} handleEcoProductQuery={handleEcoProductQuery}/> : <SellerDashboard Products={data}/>}
     </div>
     <ChatBot/>
     <Footer/>

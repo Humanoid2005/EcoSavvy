@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useParams,Link } from "react-router-dom";
 import { Star,Leaf,ArrowLeft,ShoppingCart } from "lucide-react";
 import Navbar from './NavBar';
@@ -45,7 +45,49 @@ const mockProducts = [
 
 export default function ProductDetail() {
     const { id } = useParams();
-    const product = mockProducts[0]; // In real app, fetch product by id
+    const [data, setData] = useState(null);
+    const [pending, setPending] = useState(true);
+    const [error, setError] = useState(null);
+    const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const response = await fetch(`${BACKEND_URL}/api/all-products`, {
+            method: "GET",
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            credentials: "include"
+          });
+
+          if (!response.ok) {
+            throw new Error("Unable to fetch data");
+          }
+
+          const result = await response.json();
+          setData(result);
+          setPending(false);
+        } catch (err) {
+          setError(err.message);
+          setPending(false);
+        }
+      };
+
+      fetchData();
+    }, [BACKEND_URL]);
+
+    if(pending || error){
+      return <>
+      <Navbar/>
+      <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin" />
+      <ChatBot/>
+      <Footer/>
+      </>;
+    }
+
+    const product = data.product;
+    
   
     return (
         <>
@@ -124,7 +166,18 @@ export default function ProductDetail() {
                   <h2 className="text-xl font-semibold text-gray-900 mb-4">Sustainability Information</h2>
                   <div className="bg-green-50 rounded-lg p-4">
                     <dl className="space-y-2">
-                      {Object.entries(product.sustainabilityInfo).map(([key, value]) => (
+                      {Object.entries(product.eco_features).map(([key, value]) => (
+                        <div key={key}>
+                          <dt className="text-sm font-medium text-gray-600 capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}:</dt>
+                          <dd className="text-gray-800">{value}</dd>
+                        </div>
+                      ))}
+                    </dl>
+                  </div>
+                  <h2 className="text-xl font-semibold text-gray-900 mb-4">Features</h2>
+                  <div className="bg-green-50 rounded-lg p-4">
+                    <dl className="space-y-2">
+                      {Object.entries(product.details).map(([key, value]) => (
                         <div key={key}>
                           <dt className="text-sm font-medium text-gray-600 capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}:</dt>
                           <dd className="text-gray-800">{value}</dd>
