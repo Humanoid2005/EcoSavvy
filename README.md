@@ -24,7 +24,7 @@ Clone the project
   git clone https://github.com/Humanoid2005/EcoSavvy.git
 ```
 
-Go to the project directory
+Go to the project frontend directory
 
 ```bash
   cd EcoSavvy/Frontend
@@ -36,10 +36,24 @@ Install dependencies
   npm install
 ```
 
-Start the server
+Start the frontend server
 
 ```bash
   npm run dev
 ```
+Go to the project backend directory
 
+```bash
+  cd ../Backend
+```
+Install dependencies
+
+```bash
+  pip install -r requirements.txt
+```
+Start the backend server
+
+```bash
+  uvicorn main:app --reload
+```
 
